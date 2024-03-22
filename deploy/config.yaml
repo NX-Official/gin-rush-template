@@ -1,0 +1,11 @@
+Host: "0.0.0.0"
+Port: "8080"
+Prefix: "/"
+
+Mysql:
+  Host: "mysql"
+  Port: "3306"
+  Username: "root"
+  Password: "12345678"
+  DBName: "gin-rush-template"
+

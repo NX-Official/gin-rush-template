@@ -1,0 +1,46 @@
+version: '2.1'
+
+networks:
+  gin-rush-template-net:
+    driver: bridge
+
+services:
+  app:
+    image: nxofficial/gin-rush-template:latest
+    container_name: gin-rush-template-app
+    volumes:
+        - ./config.yaml:/app/config/config.yaml
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: always
+    networks:
+      - gin-rush-template-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: gin-rush-template-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: gin-rush-template
+      TZ: Asia/Shanghai
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 5s
+      retries: 10
+    privileged: true
+    restart: always
+    networks:
+      - gin-rush-template-net
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: gin-rush-template-watchtower
+    command: --interval 5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # 需要将 Docker 的 sock 映射进去以控制 Docker
+    restart: always
+    networks:
+      - gin-rush-template-net
