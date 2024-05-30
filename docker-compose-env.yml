@@ -1,11 +1,6 @@
 version: '2.1'
 
-networks:
-  gin-rush-template-net:
-    driver: bridge
 
-
-# 如果你没有 MySQL 和 Redis 等依赖, 可以启动本 Docker Compose
 services:
   mysql:
     image: mysql:8.0
@@ -16,14 +11,9 @@ services:
       TZ: Asia/Shanghai
     ports:
       - "3306:3306"
-    #    volumes:
-    #      - ./deploy/data/mysql/data:/var/lib/mysql
-    #    command: --default-authentication-plugin=mysql_native_password
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 5s
+      interval: 1s
       retries: 10
     privileged: true
     restart: always
-    networks:
-      - gin-rush-template-net

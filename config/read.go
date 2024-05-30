@@ -7,27 +7,23 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Path = "config/config.yaml"
-var c = Config{}
+var C = Config{}
 
-func Read() {
-	viper.SetConfigFile(Path)
-
-	if tools.FileExist(Path) {
-		tools.PanicIfErr(
-			viper.ReadInConfig(),
-			viper.Unmarshal(&c),
-		)
+func Read(filePath string) {
+	viper.SetConfigFile(filePath)
+	if tools.FileExist(filePath) {
+		tools.Must(viper.ReadInConfig())
+		tools.Must(viper.Unmarshal(&C))
 	} else {
-		fmt.Println("Config file not exist in ", Path, ". Using environment variables.")
-		if err := envconfig.Process("", &c); err != nil {
-			panic(err)
-		}
+		fmt.Println("Config file not exist in ", filePath, ". Using environment variables.")
+		tools.Must(envconfig.Process("", &C))
 	}
+}
 
-	//fmt.Printf("%+v\n", Config)
+func Set(config Config) {
+	C = config
 }
 
 func Get() Config {
-	return c
+	return C
 }

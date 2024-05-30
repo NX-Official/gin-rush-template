@@ -9,8 +9,10 @@ import (
 	"log"
 )
 
+const configPath = "config.yaml"
+
 func Init() {
-	config.Read()
+	config.Read(configPath)
 	database.Init()
 
 	for _, m := range module.Modules {

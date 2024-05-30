@@ -16,7 +16,6 @@ func newError(code int32, msg string) *Error {
 	return &Error{
 		Code:    code,
 		Message: msg,
-		//LogInfo: make(map[string]string),
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type responseBody struct {
+type ResponseBody struct {
 	Code   int32  `json:"code"`
 	Msg    string `json:"msg"`
 	Origin string `json:"origin,omitempty"`
@@ -15,7 +15,7 @@ type responseBody struct {
 }
 
 func Success(c *gin.Context, data ...any) {
-	response := responseBody{
+	response := ResponseBody{
 		Code: success.Code,
 		Msg:  success.Message,
 		Data: nil,
@@ -27,7 +27,7 @@ func Success(c *gin.Context, data ...any) {
 }
 
 func Fail(c *gin.Context, err error) {
-	var response responseBody
+	var response ResponseBody
 
 	var e *Error
 	ok := errors.As(err, &e)
