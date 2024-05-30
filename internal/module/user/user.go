@@ -14,8 +14,12 @@ type User struct {
 	Password string `json:"password" binding:"required,min=6,max=12"`
 }
 
+type createRequest struct {
+	User
+}
+
 func Create(c *gin.Context) {
-	var req User
+	var req createRequest
 	if err := c.BindJSON(&req); err != nil {
 		errs.Fail(c, errs.InvalidRequest.WithTips(err.Error()))
 		return

@@ -20,8 +20,8 @@ vendor
 .idea/
 .vscode/
 deploy/data/*
-config/config.yaml
-
+config.yaml
+config.yaml
 
 # Log files
 */logs
