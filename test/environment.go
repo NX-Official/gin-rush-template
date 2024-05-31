@@ -15,7 +15,7 @@ import (
 
 const (
 	EnvFileName   = "docker-compose.env.yml"
-	ConfigFilName = "config.yaml"
+	ConfigFilName = "config.example.yaml"
 )
 
 func SetupEnvironment(t *testing.T) {
