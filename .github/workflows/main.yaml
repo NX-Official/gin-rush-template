@@ -13,6 +13,4 @@ jobs:
     needs: run-tests
     uses: ./.github/workflows/docker-publish.yaml
     with:
-      docker_username: ${{ secrets.DOCKER_USERNAME }}
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
-      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
+      secrets: inherit
