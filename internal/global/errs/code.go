@@ -1,6 +1,6 @@
 package errs
 
-// This error code refers to the semantics of HTTP status codes
+// This errorz code refers to the semantics of HTTP status codes
 // to facilitate the identification of error types
 
 // Type |Type description
@@ -38,3 +38,5 @@ var (
 	serverInternal = newError(50001, "服务器内部错误")
 	DatabaseError  = newError(50002, "数据库错误")
 )
+
+// TODO: i18n

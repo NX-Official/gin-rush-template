@@ -11,6 +11,7 @@ import (
 
 func TestCreate(t *testing.T) {
 	test.SetupEnvironment(t)
+
 	t.Run("Success", func(t *testing.T) {
 		req := CreateRequest{
 			User: User{
@@ -25,6 +26,7 @@ func TestCreate(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, true, tools.Compare(req.Password, userInfo.Password))
 	})
+
 	t.Run("PassWordTooShort", func(t *testing.T) {
 		req := CreateRequest{
 			User: User{
@@ -37,6 +39,7 @@ func TestCreate(t *testing.T) {
 			`Key: 'CreateRequest.User.Password' Error:Field validation for 'Password' failed on the 'min' tag`,
 		), resp)
 	})
+
 	t.Run("EmailInvalid", func(t *testing.T) {
 		req := CreateRequest{
 			User: User{
@@ -48,5 +51,21 @@ func TestCreate(t *testing.T) {
 		test.ErrorEqual(t, errs.InvalidRequest.WithTips(
 			`Key: 'CreateRequest.User.Email' Error:Field validation for 'Email' failed on the 'email' tag`,
 		), resp)
+	})
+
+	t.Run("EmailExist", func(t *testing.T) {
+		req := CreateRequest{
+			User: User{
+				Email:    "test@test.com",
+				Password: "123456",
+			},
+		}
+		u := database.Query.User
+		_, err := u.Unscoped().Where(u.Email.Eq(req.Email)).Delete()
+		require.NoError(t, err)
+		resp := test.DoRequest(t, Create, req)
+		test.NoError(t, resp)
+		resp = test.DoRequest(t, Create, req)
+		test.ErrorEqual(t, errs.HasExist, resp)
 	})
 }

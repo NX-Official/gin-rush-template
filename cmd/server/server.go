@@ -23,6 +23,7 @@ func Init() {
 
 func Run() {
 	r := gin.New()
+	gin.SetMode(string(config.Get().Mode))
 	r.Use(gin.Logger(), middleware.Recovery())
 	for _, m := range module.Modules {
 		log.Println("InitRouter: " + m.GetName())
