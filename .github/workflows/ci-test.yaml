@@ -5,6 +5,9 @@ on:
     branches:
       - main # 指定触发事件的分支，这里是 main 分支
 
+env:
+  TESTCONTAINERS_RYUK_DISABLED: true
+
 jobs:
     test:
       runs-on: ubuntu-latest
