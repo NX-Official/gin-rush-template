@@ -12,5 +12,4 @@ jobs:
   build-and-push:
     needs: run-tests
     uses: ./.github/workflows/docker-publish.yaml
-    with:
-      secrets: inherit
+    secrets: inherit
