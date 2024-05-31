@@ -2,6 +2,16 @@ name: Build and Push Docker Image
 
 on:
   workflow_call:
+    inputs:
+      docker_username:
+        required: true
+        type: string
+      docker_password:
+        required: true
+        type: string
+      docker_repository:
+        required: true
+        type: string
 
 jobs:
   build-and-push:
