@@ -7,8 +7,8 @@ on:
 
 jobs:
   run-tests:
-    uses: ./.github/workflows/ci-test.yml
+    uses: ./.github/workflows/ci-test.yaml
 
   build-and-push:
     needs: run-tests
-    uses: ./.github/workflows/docker-publish.yml
+    uses: ./.github/workflows/docker-publish.yaml
