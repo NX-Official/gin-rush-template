@@ -1,9 +1,7 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main # 指定触发事件的分支，这里是 main 分支
+  workflow_call:
 
 jobs:
   build-and-push:
