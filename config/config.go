@@ -1,9 +1,17 @@
 package config
 
+type Mode string
+
+const (
+	DebugMode   Mode = "debug"
+	ReleaseMode Mode = "release"
+)
+
 type Config struct {
 	Host   string `envconfig:"HOST"`
 	Port   string `envconfig:"PORT"`
 	Prefix string `envconfig:"PREFIX"`
+	Mode   Mode   `envconfig:"MODE"`
 	Mysql  Mysql
 	JWT    JWT
 }

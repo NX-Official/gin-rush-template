@@ -29,7 +29,7 @@ func Create(c *gin.Context) {
 	err := database.Query.User.Create(user)
 	switch {
 	case tools.IsDuplicateKeyError(err):
-		errs.Fail(c, errs.HasExist)
+		errs.Fail(c, errs.HasExist.WithOrigin(err))
 		return
 	case err != nil:
 		errs.Fail(c, errs.DatabaseError.WithOrigin(err))

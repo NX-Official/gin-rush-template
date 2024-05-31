@@ -2,6 +2,7 @@ package errs
 
 import (
 	"fmt"
+	"gin-rush-template/config"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"net/http"
@@ -37,7 +38,10 @@ func Fail(c *gin.Context, err error) {
 
 	response.Code = e.Code
 	response.Msg = e.Message
-	response.Origin = e.Origin
+
+	if config.Get().Mode == config.DebugMode {
+		response.Origin = e.Origin
+	}
 
 	c.JSON(int(e.Code/100), response)
 	c.Abort()
