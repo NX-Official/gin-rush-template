@@ -1,0 +1,14 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main # 指定触发事件的分支，这里是 main 分支
+
+jobs:
+  run-tests:
+    uses: ./.github/workflows/test.yml
+
+  build-and-push:
+    needs: run-tests
+    uses: ./.github/workflows/build-and-push.yml
