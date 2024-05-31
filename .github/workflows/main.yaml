@@ -7,8 +7,12 @@ on:
 
 jobs:
   run-tests:
-    uses: ./.github/workflows/ci-test.yaml
+    uses: ./.github/workflows/test.yml
 
   build-and-push:
     needs: run-tests
-    uses: ./.github/workflows/docker-publish.yaml
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
