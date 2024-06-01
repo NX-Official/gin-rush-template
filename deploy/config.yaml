@@ -3,6 +3,12 @@ Port: "8080"
 Prefix: "/"
 Mode: "release"
 
+OTel:
+  Enable: true
+  ServiceName: "gin-rush-template"
+  AgentHost: "tempo"
+  AgentPort: "4318"
+
 Mysql:
   Host: "mysql"
   Port: "3306"

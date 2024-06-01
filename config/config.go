@@ -12,6 +12,7 @@ type Config struct {
 	Port   string `envconfig:"PORT"`
 	Prefix string `envconfig:"PREFIX"`
 	Mode   Mode   `envconfig:"MODE"`
+	OTel   OTel
 	Mysql  Mysql
 	JWT    JWT
 }
@@ -27,4 +28,12 @@ type Mysql struct {
 type JWT struct {
 	AccessSecret string `envconfig:"ACCESS_SECRET"`
 	AccessExpire int64  `envconfig:"ACCESS_EXPIRE"`
+}
+
+type OTel struct {
+	Enable      bool   `envconfig:"ENABLE"`
+	ServiceName string `envconfig:"SERVICE_NAME"`
+	Endpoint    string `envconfig:"ENDPOINT"`
+	AgentHost   string `envconfig:"AGENT_HOST"`
+	AgentPort   string `envconfig:"AGENT_PORT"`
 }
