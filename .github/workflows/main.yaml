@@ -7,9 +7,16 @@ on:
 
 jobs:
   run-tests:
-    uses: ./.github/workflows/ci-test.yaml
+    uses: ./.github/workflows/run-makefile.yaml
+    with:
+      command: test
+
+  run-lint:
+    uses: ./.github/workflows/run-makefile.yaml
+    with:
+      command: lint
 
   build-and-push:
-    needs: run-tests
+    needs: [ run-tests, run-lint ]
     uses: ./.github/workflows/docker-publish.yaml
     secrets: inherit
