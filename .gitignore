@@ -26,4 +26,5 @@ config.yaml
 */logs
 log
 
+deploy/otel/.data
 

@@ -5,6 +5,7 @@ import (
 	"gin-rush-template/config"
 	"gin-rush-template/internal/global/query"
 	"gin-rush-template/internal/model"
+	"gin-rush-template/tools"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -28,17 +29,13 @@ func Init() {
 		//DisableForeignKeyConstraintWhenMigrating: true,
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-	if err != nil {
-		panic(err)
-	}
+	tools.PanicOnErr(err)
 
 	// 自动建表
 	err = DB.AutoMigrate(
 		model.User{},
 	)
 
-	if err != nil {
-		panic(err)
-	}
+	tools.PanicOnErr(err)
 	Query = query.Use(DB)
 }

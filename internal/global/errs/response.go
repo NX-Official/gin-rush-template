@@ -1,10 +1,13 @@
 package errs
 
 import (
+	"encoding/json"
 	"fmt"
 	"gin-rush-template/config"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"net/http"
 )
 
@@ -24,7 +27,7 @@ func Success(c *gin.Context, data ...any) {
 	if len(data) > 0 {
 		response.Data = data[0]
 	}
-	c.JSON(http.StatusOK, response)
+	writeResponse(c, http.StatusOK, response)
 }
 
 func Fail(c *gin.Context, err error) {
@@ -42,9 +45,16 @@ func Fail(c *gin.Context, err error) {
 	if config.Get().Mode == config.DebugMode {
 		response.Origin = e.Origin
 	}
-
-	c.JSON(int(e.Code/100), response)
+	c.Set(ErrorContextKey, *e)
+	writeResponse(c, int(e.Code/100), response)
 	c.Abort()
+}
+
+func writeResponse(c *gin.Context, code int, response ResponseBody) {
+	body, _ := json.Marshal(response)
+	span := trace.SpanFromContext(c.Request.Context())
+	span.SetAttributes(attribute.KeyValue{Key: "http.response.body", Value: attribute.StringValue(string(body))})
+	c.JSON(code, response)
 }
 
 func Recovery(c *gin.Context) {

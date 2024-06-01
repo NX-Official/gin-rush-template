@@ -1,5 +1,4 @@
-
-all: test
+all: test lint
 
 test:
 	go test -v ./...
@@ -10,4 +9,4 @@ lint:
 lint-install:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.59.0
 
-.PHONY: test
+.PHONY: test lint lint-install

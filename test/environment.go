@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	EnvFileName   = "docker-compose.env.yml"
+	EnvFileName   = "docker-compose.env.yaml"
 	ConfigFilName = "config.example.yaml"
 )
 

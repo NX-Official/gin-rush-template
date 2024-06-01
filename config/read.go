@@ -12,11 +12,11 @@ var C = Config{}
 func Read(filePath string) {
 	viper.SetConfigFile(filePath)
 	if tools.FileExist(filePath) {
-		tools.Must(viper.ReadInConfig())
-		tools.Must(viper.Unmarshal(&C))
+		tools.PanicOnErr(viper.ReadInConfig())
+		tools.PanicOnErr(viper.Unmarshal(&C))
 	} else {
 		fmt.Println("Config file not exist in ", filePath, ". Using environment variables.")
-		tools.Must(envconfig.Process("", &C))
+		tools.PanicOnErr(envconfig.Process("", &C))
 	}
 }
 
