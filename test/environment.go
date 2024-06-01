@@ -5,12 +5,11 @@ import (
 	"gin-rush-template/config"
 	"gin-rush-template/internal/global/database"
 	"gin-rush-template/tools"
-	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
-)
-import (
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 	tc "github.com/testcontainers/testcontainers-go/modules/compose"
+	"github.com/testcontainers/testcontainers-go/wait"
+	"testing"
 )
 
 const (
@@ -33,5 +32,6 @@ func SetupEnvironment(t *testing.T) {
 	)
 
 	config.Read(tools.SearchFile(ConfigFilName))
+	gin.SetMode(gin.TestMode)
 	database.Init()
 }

@@ -57,5 +57,4 @@ func Recovery(c *gin.Context) {
 			Fail(c, errors.New(fmt.Sprintf("%+v", info)))
 		}
 	}
-	return
 }
