@@ -6,17 +6,10 @@ on:
       - main # 指定触发事件的分支，这里是 main 分支
 
 jobs:
-  run-tests:
+  run-makefile:
     uses: ./.github/workflows/run-makefile.yaml
-    with:
-      command: test
-
-  run-lint:
-    uses: ./.github/workflows/run-makefile.yaml
-    with:
-      command: lint
 
   build-and-push:
-    needs: [ run-tests, run-lint ]
+    needs: [ run-makefile ]
     uses: ./.github/workflows/docker-publish.yaml
     secrets: inherit
