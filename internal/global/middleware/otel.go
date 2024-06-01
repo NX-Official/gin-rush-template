@@ -26,14 +26,6 @@ func Trace() gin.HandlerFunc {
 			c.Request = c.Request.WithContext(savedCtx)
 		}()
 
-		var body []byte
-		if c.Request.Body != nil {
-			buf := new(bytes.Buffer)
-			_, _ = buf.ReadFrom(c.Request.Body)
-			body = buf.Bytes()
-			c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
-		}
-
 		ctx := otel.GetTextMapPropagator().Extract(savedCtx, propagation.HeaderCarrier(c.Request.Header))
 		opts := []oteltrace.SpanStartOption{
 			oteltrace.WithSpanKind(oteltrace.SpanKindServer),
@@ -44,7 +36,6 @@ func Trace() gin.HandlerFunc {
 				attribute.KeyValue{Key: "http.flavor", Value: attribute.StringValue(c.Request.Proto)},
 				attribute.KeyValue{Key: "net.peer.ip", Value: attribute.StringValue(c.ClientIP())},
 				attribute.KeyValue{Key: "http.route", Value: attribute.StringValue(spanName)},
-				attribute.KeyValue{Key: "http.request.body", Value: attribute.StringValue(string(body))},
 			),
 		}
 
@@ -52,6 +43,18 @@ func Trace() gin.HandlerFunc {
 		traceID := span.SpanContext().TraceID().String()
 		c.Writer.Header().Set("X-Trace-ID", traceID)
 		defer span.End()
+
+		var body []byte
+		if c.Request.Body != nil {
+			buf := new(bytes.Buffer)
+			_, err := buf.ReadFrom(c.Request.Body)
+			if err != nil {
+				span.SetStatus(codes.Error, "Failed to read request body")
+			}
+			body = buf.Bytes()
+			c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+		}
+		span.SetAttributes(attribute.String("http.request.body", string(body)))
 
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
