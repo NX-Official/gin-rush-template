@@ -29,7 +29,7 @@ func Trace() gin.HandlerFunc {
 		var body []byte
 		if c.Request.Body != nil {
 			buf := new(bytes.Buffer)
-			buf.ReadFrom(c.Request.Body)
+			_, _ = buf.ReadFrom(c.Request.Body)
 			body = buf.Bytes()
 			c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 		}

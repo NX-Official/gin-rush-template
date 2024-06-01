@@ -7,7 +7,6 @@ import (
 	"gin-rush-template/tools"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/resource"
 	oteltrace "go.opentelemetry.io/otel/sdk/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -16,11 +15,6 @@ import (
 
 // List of supported exporters
 // https://opentelemetry.io/docs/instrumentation/go/exporters/
-
-// Console Exporter, only for testing
-func newConsoleExporter() (oteltrace.SpanExporter, error) {
-	return stdouttrace.New()
-}
 
 // OTLP Exporter
 func newOTLPExporter(ctx context.Context) (oteltrace.SpanExporter, error) {
