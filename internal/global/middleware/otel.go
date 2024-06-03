@@ -8,8 +8,10 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/propagation"
+	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 	oteltrace "go.opentelemetry.io/otel/trace"
 	"io"
+	"strings"
 )
 
 const (
@@ -30,16 +32,20 @@ func Trace() gin.HandlerFunc {
 		opts := []oteltrace.SpanStartOption{
 			oteltrace.WithSpanKind(oteltrace.SpanKindServer),
 			oteltrace.WithAttributes(
-				attribute.KeyValue{Key: "http.method", Value: attribute.StringValue(c.Request.Method)},
-				attribute.KeyValue{Key: "http.target", Value: attribute.StringValue(c.Request.URL.Path)},
-				attribute.KeyValue{Key: "http.host", Value: attribute.StringValue(c.Request.Host)},
-				attribute.KeyValue{Key: "http.flavor", Value: attribute.StringValue(c.Request.Proto)},
-				attribute.KeyValue{Key: "net.peer.ip", Value: attribute.StringValue(c.ClientIP())},
-				attribute.KeyValue{Key: "http.route", Value: attribute.StringValue(spanName)},
+				semconv.HTTPMethodKey.String(c.Request.Method),
+				semconv.HTTPURLKey.String(c.Request.URL.Path),
+				semconv.NetHostNameKey.String(c.Request.Host),
+				semconv.HTTPFlavorKey.String(c.Request.Proto),
+				semconv.HostIPKey.String(c.ClientIP()),
 			),
 		}
 
 		ctx, span := tracer.Start(ctx, spanName, opts...)
+
+		for name, values := range c.Request.Header {
+			span.SetAttributes(attribute.String("http.header."+name, strings.Join(values, ", ")))
+		}
+
 		traceID := span.SpanContext().TraceID().String()
 		c.Writer.Header().Set("X-Trace-ID", traceID)
 		defer span.End()

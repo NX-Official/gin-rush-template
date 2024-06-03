@@ -8,7 +8,7 @@ import (
 func main() {
 	g := gen.NewGenerator(gen.Config{
 		OutPath: "./internal/global/query",
-		Mode:    gen.WithoutContext, // generate mode
+		//Mode:    gen.WithoutContext, // generate mode
 	})
 
 	//g.ApplyBasic(database.Models...)

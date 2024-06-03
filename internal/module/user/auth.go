@@ -17,7 +17,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	u := database.Query.User
-	userInfo, err := u.Where(u.Email.Eq(req.Email)).First()
+	userInfo, err := u.WithContext(c.Request.Context()).Where(u.Email.Eq(req.Email)).First()
 	switch {
 	case errors.Is(err, gorm.ErrRecordNotFound):
 		errs.Fail(c, errs.NotFound)
