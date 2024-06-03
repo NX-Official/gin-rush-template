@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"gin-rush-template/internal/global/database"
 	"gin-rush-template/internal/global/errs"
 	"gin-rush-template/test"
@@ -11,6 +12,7 @@ import (
 
 func TestCreate(t *testing.T) {
 	test.SetupEnvironment(t)
+	ctx := context.Background()
 
 	t.Run("Success", func(t *testing.T) {
 		req := CreateRequest{
@@ -22,7 +24,7 @@ func TestCreate(t *testing.T) {
 		resp := test.DoRequest(t, Create, req)
 		test.NoError(t, resp)
 		u := database.Query.User
-		userInfo, err := u.Where(u.Email.Eq(req.Email)).First()
+		userInfo, err := u.WithContext(ctx).Where(u.Email.Eq(req.Email)).First()
 		require.NoError(t, err)
 		require.Equal(t, true, tools.Compare(req.Password, userInfo.Password))
 	})
@@ -61,7 +63,7 @@ func TestCreate(t *testing.T) {
 			},
 		}
 		u := database.Query.User
-		_, err := u.Unscoped().Where(u.Email.Eq(req.Email)).Delete()
+		_, err := u.WithContext(ctx).Unscoped().Where(u.Email.Eq(req.Email)).Delete()
 		require.NoError(t, err)
 		resp := test.DoRequest(t, Create, req)
 		test.NoError(t, resp)
