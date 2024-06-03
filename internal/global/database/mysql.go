@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"gin-rush-template/config"
+	"gin-rush-template/internal/global/otel"
 	"gin-rush-template/internal/global/query"
 	"gin-rush-template/internal/model"
 	"gin-rush-template/tools"
@@ -22,7 +23,7 @@ func Init() {
 		config.Get().Mysql.Port,
 		config.Get().Mysql.DBName,
 	)
-	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用单数表名
 		},
@@ -30,12 +31,7 @@ func Init() {
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	tools.PanicOnErr(err)
-
-	// 自动建表
-	err = DB.AutoMigrate(
-		model.User{},
-	)
-
-	tools.PanicOnErr(err)
-	Query = query.Use(DB)
+	tools.PanicOnErr(db.Use(otel.GetGormPlugin()))
+	tools.PanicOnErr(db.AutoMigrate(model.User{}))
+	Query = query.Use(db)
 }
