@@ -27,7 +27,6 @@ func Init() {
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用单数表名
 		},
-		//DisableForeignKeyConstraintWhenMigrating: true,
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	tools.PanicOnErr(err)
