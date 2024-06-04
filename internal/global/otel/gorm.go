@@ -95,8 +95,8 @@ func (p *gormPlugin) after() func(tx *gorm.DB) {
 
 		span.SetAttributes(
 			dbSystem(tx),
-			semconv.DBStatementKey.String(tx.Dialector.Explain(tx.Statement.SQL.String(), tx.Statement.Vars...)),
-			semconv.DBSQLTableKey.String(tx.Statement.Table),
+			semconv.DBStatement(tx.Dialector.Explain(tx.Statement.SQL.String(), tx.Statement.Vars...)),
+			semconv.DBSQLTable(tx.Statement.Table),
 			attribute.Key("db.rows_affected").Int64(tx.Statement.RowsAffected),
 		)
 		switch {
