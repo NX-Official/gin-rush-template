@@ -26,7 +26,7 @@ func TestCreate(t *testing.T) {
 		u := database.Query.User
 		userInfo, err := u.WithContext(ctx).Where(u.Email.Eq(req.Email)).First()
 		require.NoError(t, err)
-		require.Equal(t, true, tools.Compare(req.Password, userInfo.Password))
+		require.Equal(t, true, tools.PasswordCompare(req.Password, userInfo.Password))
 	})
 
 	t.Run("PassWordTooShort", func(t *testing.T) {
