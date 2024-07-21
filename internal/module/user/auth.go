@@ -26,8 +26,7 @@ func Login(c *gin.Context) {
 		errs.Fail(c, errs.DatabaseError.WithOrigin(err))
 		return
 	}
-
-	if !tools.Compare(req.Password, userInfo.Password) {
+	if !tools.PasswordCompare(req.Password, userInfo.Password) {
 		errs.Fail(c, errs.InvalidPassword)
 		return
 	}

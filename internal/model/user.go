@@ -12,11 +12,11 @@ type User struct {
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {
-	u.Password = tools.Encrypt(u.Password)
+	u.Password = tools.PasswordEncrypt(u.Password)
 	return nil
 }
 
 func (u *User) BeforeUpdate(tx *gorm.DB) error {
-	u.Password = tools.Encrypt(u.Password)
+	u.Password = tools.PasswordEncrypt(u.Password)
 	return nil
 }
