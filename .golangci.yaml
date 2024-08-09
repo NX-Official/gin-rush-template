@@ -1,0 +1,5 @@
+run:
+  tests: true
+issues:
+  exclude-dirs:
+    - "node_modules"
