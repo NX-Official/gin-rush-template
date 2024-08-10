@@ -3,8 +3,8 @@ package config
 type Mode string
 
 const (
-	DebugMode   Mode = "debug"
-	ReleaseMode Mode = "release"
+	ModeDebug   Mode = "debug"
+	ModeRelease Mode = "release"
 )
 
 type Config struct {

@@ -4,7 +4,7 @@ Prefix: "/"
 Mode: "debug"
 
 OTel:
-    Enable: true
+    Enable: false
     ServiceName: "gin-rush-template"
     AgentHost: "localhost"
     AgentPort: "4318"

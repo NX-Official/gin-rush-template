@@ -1,20 +1,24 @@
 package server
 
 import (
+	"fmt"
 	"gin-rush-template/config"
 	"gin-rush-template/internal/global/database"
+	"gin-rush-template/internal/global/logger"
 	"gin-rush-template/internal/global/middleware"
 	"gin-rush-template/internal/global/otel"
 	"gin-rush-template/internal/module"
 	"gin-rush-template/tools"
 	"github.com/gin-gonic/gin"
-	"log"
+	"log/slog"
 )
 
-const configPath = "config.yaml"
+var log *slog.Logger
 
 func Init() {
-	config.Read(configPath)
+	config.Init()
+	log = logger.New("Server")
+
 	database.Init()
 
 	if config.Get().OTel.Enable {
@@ -22,7 +26,7 @@ func Init() {
 	}
 
 	for _, m := range module.Modules {
-		log.Println("Init Module: " + m.GetName())
+		log.Info(fmt.Sprintf("Init Module: %s", m.GetName()))
 		m.Init()
 	}
 }
@@ -37,7 +41,7 @@ func Run() {
 	}
 
 	for _, m := range module.Modules {
-		log.Println("InitRouter: " + m.GetName())
+		log.Info(fmt.Sprintf("Init Router: %s", m.GetName()))
 		m.InitRouter(r.Group("/" + config.Get().Prefix))
 	}
 	err := r.Run(config.Get().Host + ":" + config.Get().Port)

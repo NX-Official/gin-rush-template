@@ -5,10 +5,10 @@ import (
 	"gin-rush-template/config"
 	"gin-rush-template/internal/global/database"
 	"gin-rush-template/tools"
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 	tc "github.com/testcontainers/testcontainers-go/modules/compose"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"os"
 	"testing"
 )
 
@@ -17,7 +17,12 @@ const (
 	ConfigFilName = "config.example.yaml"
 )
 
+func IsTest() bool {
+	return os.Getenv("ENV") == "test"
+}
+
 func SetupEnvironment(t *testing.T) {
+	t.Setenv("ENV", "test")
 	compose, err := tc.NewDockerCompose(tools.SearchFile(EnvFileName))
 	require.NoError(t, err)
 
@@ -31,7 +36,6 @@ func SetupEnvironment(t *testing.T) {
 		compose.WaitForService("mysql", wait.ForLog("port: 3306  MySQL Community Server")).Up(ctx, tc.Wait(true)),
 	)
 
-	config.Read(tools.SearchFile(ConfigFilName))
-	gin.SetMode(gin.TestMode)
+	config.Init(tools.SearchFile(ConfigFilName))
 	database.Init()
 }

@@ -12,6 +12,7 @@ import (
 
 func TestCreate(t *testing.T) {
 	test.SetupEnvironment(t)
+	selfInit()
 	ctx := context.Background()
 
 	t.Run("Success", func(t *testing.T) {

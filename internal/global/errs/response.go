@@ -42,7 +42,7 @@ func Fail(c *gin.Context, err error) {
 	response.Code = e.Code
 	response.Msg = e.Message
 
-	if config.Get().Mode == config.DebugMode {
+	if config.IsDebug() {
 		response.Origin = e.Origin
 	}
 	c.Set(ErrorContextKey, *e)

@@ -26,12 +26,15 @@ func Create(c *gin.Context) {
 	}
 	user := &model.User{}
 	_ = copier.Copy(user, &req)
+	log.Info("Creating User", "user email", user.Email)
 	err := database.Query.User.WithContext(c.Request.Context()).Create(user)
 	switch {
 	case tools.IsDuplicateKeyError(err):
+		log.Info("email exist", "email", user.Email)
 		errs.Fail(c, errs.HasExist.WithOrigin(err))
 		return
 	case err != nil:
+		log.Error("database error", "error", err)
 		errs.Fail(c, errs.DatabaseError.WithOrigin(err))
 		return
 	}
