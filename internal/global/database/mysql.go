@@ -23,12 +23,19 @@ func Init() {
 		config.Get().Mysql.Port,
 		config.Get().Mysql.DBName,
 	)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true, // 使用单数表名
-		},
-		Logger: logger.Default.LogMode(logger.Info),
-	})
+
+	gormConfig := &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 使用单数表名
+	}
+
+	switch config.Get().Mode {
+	case config.ModeDebug:
+		gormConfig.Logger = logger.Default.LogMode(logger.Info)
+	case config.ModeRelease:
+		gormConfig.Logger = logger.Discard
+	}
+
+	db, err := gorm.Open(mysql.Open(dsn), gormConfig)
 	tools.PanicOnErr(err)
 	tools.PanicOnErr(db.Use(otel.GetGormPlugin()))
 	tools.PanicOnErr(db.AutoMigrate(model.User{}))

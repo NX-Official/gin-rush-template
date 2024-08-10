@@ -32,9 +32,17 @@ func Init() {
 }
 
 func Run() {
-	r := gin.New()
 	gin.SetMode(string(config.Get().Mode))
-	r.Use(gin.Logger(), middleware.Recovery())
+	r := gin.New()
+
+	switch config.Get().Mode {
+	case config.ModeRelease:
+		r.Use(middleware.Logger(logger.Get()))
+	case config.ModeDebug:
+		r.Use(gin.Logger())
+	}
+
+	r.Use(middleware.Recovery())
 
 	if config.Get().OTel.Enable {
 		r.Use(middleware.Trace())
