@@ -48,6 +48,7 @@ services:
       - MINIO_ACCESS_KEY=superuser
       - MINIO_SECRET_KEY=supersecret
     ports:
+      - "9000:9000"
       - "9001:9001"
     entrypoint:
       - sh
