@@ -1,0 +1,23 @@
+name: 新建需求
+description: 提出新功能或改进的建议
+title: "[需求] 标题描述需求"
+labels:
+  - "enhancement"
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概述
+      placeholder: 简要描述你提出的需求
+    validations:
+      required: true
+  - type: textarea
+    id: implementation
+    attributes:
+      label: 实现方式
+      placeholder: 关于实现这个需求的想法
+  - type: textarea
+    id: references
+    attributes:
+      label: 相关资料
+      placeholder: 如果有任何参考资料、设计文档或外部链接，请在这里列出。

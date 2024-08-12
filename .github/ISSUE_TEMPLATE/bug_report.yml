@@ -1,0 +1,28 @@
+name: 新建缺陷
+description: 报告已发现的问题
+title: "[缺陷] 标题简述问题"
+labels:
+  - "bug"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      placeholder: 清晰简要地描述问题所在
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 重现步骤
+      placeholder: 如有必要，列出重现问题的步骤
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关截图或日志
+      placeholder: 如果有，请提供问题的相关截图或日志
+  - type: textarea
+    id: solution
+    attributes:
+      label: 可能的解决方案
+      placeholder: 如果你有想法，在这里输入可能的解决方案
