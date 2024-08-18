@@ -1,10 +1,7 @@
 package config
 
 import (
-	"fmt"
-	"gin-rush-template/tools"
-	"github.com/kelseyhightower/envconfig"
-	"github.com/spf13/viper"
+	"github.com/cristalhq/aconfig"
 )
 
 const defaultFilePath = "config.yaml"
@@ -16,14 +13,22 @@ func Init(path ...string) {
 	if len(path) == 1 {
 		filePath = path[0]
 	}
-	viper.SetConfigFile(filePath)
-	if tools.FileExist(filePath) {
-		tools.PanicOnErr(viper.ReadInConfig())
-		tools.PanicOnErr(viper.Unmarshal(&c))
-	} else {
-		fmt.Println("Config file not exist in ", filePath, ". Using environment variables.")
-		tools.PanicOnErr(envconfig.Process("", &c))
+	loader := aconfig.LoaderFor(&c, aconfig.Config{
+		SkipFlags: true,               // 跳过命令行解析
+		SkipEnv:   false,              // 不跳过环境变量解析
+		SkipFiles: false,              // 不跳过文件解析
+		Files:     []string{filePath}, // 如果想要支持json,toml格式的文件，可以在这里添加
+		FileDecoders: map[string]aconfig.FileDecoder{
+			".yaml": New(),
+		},
+		AllowUnknownFields: true, // 允许未知字段
+	})
+
+	if err := loader.Load(); err != nil {
+		panic(err)
 	}
+
+	return
 }
 
 func Set(config Config) {
