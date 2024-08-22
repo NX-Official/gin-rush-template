@@ -10,7 +10,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	oteltrace "go.opentelemetry.io/otel/sdk/trace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 )
 
 // List of supported exporters
@@ -27,7 +27,7 @@ func newOTLPExporter(ctx context.Context) (oteltrace.SpanExporter, error) {
 	return otlptracehttp.New(ctx, insecureOpt, endpointOpt)
 }
 
-func Init() {
+func InitTracer() {
 	r, err := resource.Merge(
 		resource.Default(),
 		resource.NewWithAttributes(

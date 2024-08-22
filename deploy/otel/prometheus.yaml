@@ -9,3 +9,6 @@ scrape_configs:
   - job_name: "tempo"
     static_configs:
       - targets: [ "tempo:3200" ]
+  - job_name: "gin_rush_template"
+    static_configs:
+      - targets: [ "host.docker.internal:8080" ]
