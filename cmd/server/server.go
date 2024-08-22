@@ -22,7 +22,8 @@ func Init() {
 	database.Init()
 
 	if config.Get().OTel.Enable {
-		otel.Init()
+		otel.InitTracer()
+		otel.InitPrometheus()
 	}
 
 	for _, m := range module.Modules {
